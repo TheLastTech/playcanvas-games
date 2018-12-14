@@ -41,6 +41,9 @@ import 'javascript-dual-inherit'
 /**********************************************/
 /* Your code                                  */
 /**********************************************/
+let main = pc.createScript('main'); //just to appease the thing
 
-import './example.js';
+
+import './EyeBall.js';
+
 
