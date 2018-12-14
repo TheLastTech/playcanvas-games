@@ -1,3 +1,63 @@
+#My notes
+
+I've extended the existing https://github.com/whydoidoit/babel-playcanvas-template and
+added the ability to do es6 classes in them. Check Eyeball.js 
+
+It works off of
+
+```javascript
+
+export default function ClassToScript(app) {
+    return function (ScriptConstructor) {
+        let scriptInstance = new ScriptConstructor();
+        let script = pc.createScript(scriptInstance.name, app);
+
+        for (let prop in scriptInstance) {
+            if (prop === 'name' || prop === 'attributes') continue;
+
+            script.prototype[prop] = scriptInstance[prop];
+        }
+
+        for (let staticProp in ScriptConstructor) {
+            if (staticProp === 'extendsFrom') continue;
+            script[staticProp] = ScriptConstructor[staticProp];
+        }
+
+        return scriptInstance;
+    }
+}
+
+importing the above and the using it like so
+
+
+
+class EyeBall{
+    construct() {
+        console.log("constructed")
+        this.startLogging = false
+        timeout(() => this.entity.enabled = true, 1000)
+    }
+
+    async initialize() {
+        console.log("Starting", this.startLogging)
+        await delay(1000)
+        console.log("Delayed")
+        await delay(20000)
+        this.startLogging = true
+    }
+
+    update(dt) {
+        if (this.startLogging) console.log(this.message, dt, V(this.entity.getPosition()).scale(0.5).data);
+    }
+}
+
+export default ClassToScript(EyeBall)
+
+(this is the default example script from the babel-playcanvas repo)
+
+below are the instructions (I'll levave for now) from the original repo. 
+```
+
 # Introduction
 
 This is a template project for using ES6 via Babel and WebPack to build [PlayCanvas](https://playcanvas.com) projects.
