@@ -55,7 +55,7 @@ export default ClassToScript(EyeBall)
 
 (this is the default example script from the babel-playcanvas repo)
 
-below are the instructions (I'll levave for now) from the original repo. 
+below are the instructions (I will levave for now) from the original repo. 
 ```
 
 # Introduction

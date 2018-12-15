@@ -1,19 +1,28 @@
-export default function ClassToScript(app) {
-    return function (ScriptConstructor) {
-        let scriptInstance = new ScriptConstructor();
-        let script = pc.createScript(scriptInstance.name, app);
+//https://forum.playcanvas.com/t/ive-finally-figured-out-how-to-use-es6-classes-with-playcanvas/5471
+export default function (ClassType,name) {
+    const instance = new ClassType();
+    const script = pc.createScript(name);
+    console.log(`add ${name} to the registry`)
+    const attributes = [];
 
-        for (let prop in scriptInstance) {
-            if (prop === 'name' || prop === 'attributes') continue;
-
-            script.prototype[prop] = scriptInstance[prop];
+    // Add public attributes accessible in the editor
+    if (instance.attributes) {
+        for (let attr in instance.attributes) {
+            attributes.push(attr)
+            script.attributes.add(attr, instance.attributes[attr])
         }
-
-        for (let staticProp in ScriptConstructor) {
-            if (staticProp === 'extendsFrom') continue;
-            script[staticProp] = ScriptConstructor[staticProp];
+    }
+    // Add instance properties and methods to prototype
+    for (let prop in instance) {
+        if (prop === 'attributes' || prop === 'name' || attributes.includes(prop)) {
+            // do nothing
+        } else {
+            script.prototype[prop] = instance[prop];
         }
+    }
 
-        return scriptInstance;
+    // Add static properties
+    for (let prop in ClassType) {
+        script[prop] = ClassType[prop];
     }
 }
